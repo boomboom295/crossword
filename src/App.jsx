@@ -566,8 +566,8 @@ export default function App() {
           <div>
             <div className="badge"><Heart size={16} /> Sahana crossword</div>
             <h1 className="title">
-              A real crossword,
-              <span style={{ color: palette.coral }}> finally fixed.</span>
+              Crossword,
+              <span style={{ color: palette.coral }}> by Shrey.</span>
             </h1>
             <p className="muted">
               Click a clue or a square, type letters directly into the grid, and every completed answer gets a ding and confetti.
@@ -585,7 +585,6 @@ export default function App() {
                 <div style={{ fontSize: 42, marginTop: 6, fontWeight: 800 }}>{solvedCount} / {words.length}</div>
               </div>
               <div style={{ background: "rgba(114,158,161,0.16)", color: palette.sage, borderRadius: 20, padding: 14 }}>
-                <Sparkles size={32} />
               </div>
             </div>
             <div className="progressTrack">
