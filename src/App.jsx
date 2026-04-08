@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Sparkles, CheckCircle2 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, Heart, Sparkles } from "lucide-react";
 
 const palette = {
   sage: "#729EA1",
@@ -11,576 +11,719 @@ const palette = {
 };
 
 const words = [
-  { number: 1, direction: "down", clue: "My fav dish you make", answer: "CAULIFLOWERPURPLE", row: 0, col: 1 },
-  { number: 2, direction: "across", clue: "Terrible vday restaurant", answer: "YUZU", row: 1, col: 0 },
-  { number: 3, direction: "across", clue: "Our restaurant", answer: "THECOMMONER", row: 5, col: 4 },
-  { number: 3, direction: "down", clue: "My fav flower", answer: "TULIP", row: 5, col: 4 },
-  { number: 4, direction: "down", clue: "Location of our first date", answer: "BRIDGEWATER", row: 6, col: 18 },
-  { number: 5, direction: "down", clue: "Dish we had at commoner the first time", answer: "CHICKEN", row: 6, col: 21 },
-  { number: 6, direction: "down", clue: "The game I asked you out over", answer: "MINECRAFT", row: 7, col: 8 },
-  { number: 7, direction: "across", clue: "The surprise", answer: "PROMISERING", row: 8, col: 0 },
-  { number: 7, direction: "down", clue: "My fav color", answer: "PURPLE", row: 8, col: 0 },
-  { number: 8, direction: "across", clue: "Name of our first child", answer: "ILLIA", row: 8, col: 18 },
-  { number: 9, direction: "down", clue: "Your fav flower", answer: "LILYOFTHEVALLEY", row: 10, col: 2 },
-  { number: 10, direction: "across", clue: "Your fav color", answer: "BLUE", row: 11, col: 13 },
-  { number: 10, direction: "down", clue: "One of your fav minecraft mob (Trans/Pan____)", answer: "BEE", row: 11, col: 13 },
-  { number: 11, direction: "across", clue: "Day we met", answer: "TWELVE", row: 11, col: 17 },
-  { number: 12, direction: "down", clue: "The body part you love", answer: "BICEP", row: 12, col: 10 },
-  { number: 13, direction: "across", clue: "The name of our biological kid", answer: "SERAPHINA", row: 13, col: 12 },
-  { number: 14, direction: "down", clue: "My fav minecraft mob", answer: "PHANTOM", row: 13, col: 16 },
-  { number: 15, direction: "down", clue: "Your fav new egg food", answer: "MUNCHKINS", row: 14, col: 6 },
-  { number: 16, direction: "across", clue: "First gift I ever gave you", answer: "TURTLE", row: 15, col: 4 },
-  { number: 17, direction: "across", clue: "A fruit that I call you", answer: "PUMPKIN", row: 16, col: 10 },
-  { number: 18, direction: "across", clue: "Name of our second child", answer: "LYRA", row: 16, col: 18 },
-  { number: 19, direction: "across", clue: "First gift you ever gave me", answer: "FLOWERS", row: 18, col: 14 },
-  { number: 19, direction: "down", clue: "First date dish", answer: "FRIES", row: 18, col: 14 },
-  { number: 20, direction: "across", clue: "The gemstone you want", answer: "ALEXANDRITE", row: 21, col: 0 },
+  { number: 1, direction: "down", clue: "My fav dish you make", answer: "CAULIFLOWER", row: 0, col: 1 },
+  { number: 2, direction: "across", clue: "Terrible vday restaurant", answer: "YUZU", row: 2, col: 0 },
+  { number: 3, direction: "across", clue: "Our restaurant", answer: "THECOMMONER", row: 7, col: 4 },
+  { number: 3, direction: "down", clue: "My fav flower", answer: "TULIP", row: 7, col: 4 },
+  { number: 4, direction: "down", clue: "Location of our first date", answer: "BRIDGEWATER", row: 8, col: 20 },
+  { number: 5, direction: "down", clue: "Dish we had at commoner the first time", answer: "CHICKEN", row: 8, col: 23 },
+  { number: 6, direction: "down", clue: "The game I asked you out over", answer: "MINECRAFT", row: 9, col: 8 },
+  { number: 7, direction: "across", clue: "The surprise", answer: "PROMISERING", row: 10, col: 0 },
+  { number: 7, direction: "down", clue: "My fav color", answer: "PURPLE", row: 10, col: 0 },
+  { number: 8, direction: "across", clue: "Name of our first child", answer: "ILLIA", row: 10, col: 20 },
+  { number: 9, direction: "down", clue: "Your fav flower", answer: "LILYOFTHEVALLEY", row: 12, col: 2 },
+  { number: 10, direction: "across", clue: "Your fav color", answer: "BLUE", row: 13, col: 13 },
+  { number: 10, direction: "down", clue: "One of your fav minecraft mob (Trans/Pan____)", answer: "BEE", row: 13, col: 13 },
+  { number: 11, direction: "across", clue: "Day we met", answer: "TWELVE", row: 13, col: 18 },
+  { number: 12, direction: "down", clue: "The body part you love", answer: "BICEP", row: 14, col: 10 },
+  { number: 13, direction: "across", clue: "The name of our biological kid", answer: "SERAPHINA", row: 15, col: 12 },
+  { number: 14, direction: "down", clue: "My fav minecraft mob", answer: "PHANTOM", row: 15, col: 16 },
+  { number: 15, direction: "down", clue: "Your fav new egg food", answer: "MUNCHKINS", row: 16, col: 6 },
+  { number: 16, direction: "across", clue: "First gift I ever gave you", answer: "TURTLE", row: 17, col: 5 },
+  { number: 17, direction: "across", clue: "A fruit that I call you", answer: "PUMPKIN", row: 18, col: 10 },
+  { number: 18, direction: "across", clue: "Name of our second child", answer: "LYRA", row: 18, col: 18 },
+  { number: 19, direction: "across", clue: "First gift you ever gave me", answer: "FLOWERS", row: 20, col: 14 },
+  { number: 19, direction: "down", clue: "First date dish", answer: "FRIES", row: 20, col: 14 },
+  { number: 20, direction: "across", clue: "The gemstone you want", answer: "ALEXANDRITE", row: 23, col: 1 },
 ];
 
-const rows = 24;
-const cols = 24;
+const ROWS = 27;
+const COLS = 25;
+const CELL = 36;
 
-function keyForCell(r, c) {
-  return `${r}-${c}`;
-}
+const cellKey = (row, col) => `${row}-${col}`;
+const wordId = (word) => `${word.number}-${word.direction}`;
 
 function buildGrid() {
   const map = new Map();
 
-  words.forEach((word) => {
-    const len = word.answer.length;
-    for (let i = 0; i < len; i++) {
-      const r = word.row + (word.direction === "down" ? i : 0);
-      const c = word.col + (word.direction === "across" ? i : 0);
-      const key = keyForCell(r, c);
-      const existing = map.get(key);
-      const cell = existing || {
-        row: r,
-        col: c,
+  for (const word of words) {
+    for (let i = 0; i < word.answer.length; i += 1) {
+      const row = word.row + (word.direction === "down" ? i : 0);
+      const col = word.col + (word.direction === "across" ? i : 0);
+      const key = cellKey(row, col);
+      const existing = map.get(key) || {
+        row,
+        col,
         solution: word.answer[i],
         guess: "",
-        numbers: [],
+        number: null,
         across: null,
         down: null,
       };
 
-      cell.solution = word.answer[i];
-      if (i === 0) cell.numbers.push(word.number);
-      if (word.direction === "across") cell.across = `${word.number}-across`;
-      if (word.direction === "down") cell.down = `${word.number}-down`;
+      existing.solution = word.answer[i];
+      if (i === 0) existing.number = word.number;
+      if (word.direction === "across") existing.across = wordId(word);
+      if (word.direction === "down") existing.down = wordId(word);
 
-      map.set(key, cell);
+      map.set(key, existing);
     }
-  });
+  }
 
   return map;
 }
 
-function getCellsForWord(word, gridMap) {
+function getCellsForWord(word, grid) {
   return Array.from({ length: word.answer.length }, (_, i) => {
-    const r = word.row + (word.direction === "down" ? i : 0);
-    const c = word.col + (word.direction === "across" ? i : 0);
-    return gridMap.get(keyForCell(r, c));
+    const row = word.row + (word.direction === "down" ? i : 0);
+    const col = word.col + (word.direction === "across" ? i : 0);
+    return grid.get(cellKey(row, col));
   });
 }
 
 function playDing() {
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContextClass) return;
-  const ctx = new AudioContextClass();
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) return;
+
+  const ctx = new AudioCtx();
   const now = ctx.currentTime;
-
-  const osc1 = ctx.createOscillator();
-  const osc2 = ctx.createOscillator();
   const gain = ctx.createGain();
+  const oscA = ctx.createOscillator();
+  const oscB = ctx.createOscillator();
 
-  osc1.type = "sine";
-  osc2.type = "triangle";
-  osc1.frequency.setValueAtTime(880, now);
-  osc2.frequency.setValueAtTime(1320, now);
+  oscA.type = "sine";
+  oscB.type = "triangle";
+  oscA.frequency.setValueAtTime(880, now);
+  oscB.frequency.setValueAtTime(1320, now);
 
   gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(0.16, now + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+  gain.gain.exponentialRampToValueAtTime(0.13, now + 0.03);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
 
-  osc1.connect(gain);
-  osc2.connect(gain);
+  oscA.connect(gain);
+  oscB.connect(gain);
   gain.connect(ctx.destination);
 
-  osc1.start(now);
-  osc2.start(now);
-  osc1.stop(now + 0.45);
-  osc2.stop(now + 0.45);
+  oscA.start(now);
+  oscB.start(now);
+  oscA.stop(now + 0.42);
+  oscB.stop(now + 0.42);
 }
 
-function launchConfetti(setBursts) {
-  const burst = Array.from({ length: 40 }, (_, i) => ({
-    id: `${Date.now()}-${i}`,
-    left: Math.random() * 100,
-    delay: Math.random() * 0.2,
-    duration: 1.8 + Math.random() * 1.1,
+function createConfetti() {
+  return Array.from({ length: 32 }, (_, index) => ({
+    id: `${Date.now()}-${index}`,
+    left: 6 + Math.random() * 88,
+    drift: -90 + Math.random() * 180,
     rotate: -180 + Math.random() * 360,
-    drift: -120 + Math.random() * 240,
-    size: 8 + Math.random() * 10,
-    shape: Math.random() > 0.5 ? "50%" : "6px",
-    opacity: 0.8 + Math.random() * 0.2,
+    duration: 1.8 + Math.random() * 1.2,
+    delay: Math.random() * 0.15,
+    size: 7 + Math.random() * 8,
+    borderRadius: Math.random() > 0.55 ? "999px" : "6px",
   }));
-
-  setBursts((prev) => [...prev, ...burst]);
-  window.setTimeout(() => {
-    setBursts((prev) => prev.filter((p) => !burst.some((b) => b.id === p.id)));
-  }, 3200);
 }
 
-export default function SahanaCrosswordWebsite() {
-  const gridMap = useMemo(() => buildGrid(), []);
+export default function App() {
+  const grid = useMemo(() => buildGrid(), []);
   const [guesses, setGuesses] = useState(() => {
-    const initial = {};
-    gridMap.forEach((cell, key) => {
-      initial[key] = "";
+    const next = {};
+    grid.forEach((_, key) => {
+      next[key] = "";
     });
-    return initial;
+    return next;
   });
   const [selectedWordId, setSelectedWordId] = useState("2-across");
-  const [selectedCellKey, setSelectedCellKey] = useState(keyForCell(1, 0));
-  const [solvedWords, setSolvedWords] = useState({});
-  const [bursts, setBursts] = useState([]);
-  const [showSolvedBanner, setShowSolvedBanner] = useState(false);
+  const [selectedCell, setSelectedCell] = useState(cellKey(2, 0));
+  const [solved, setSolved] = useState({});
+  const [confetti, setConfetti] = useState([]);
+  const [finished, setFinished] = useState(false);
   const refs = useRef({});
 
-  const selectedWord = words.find((w) => `${w.number}-${w.direction}` === selectedWordId) || words[0];
+  const selectedWord = words.find((item) => wordId(item) === selectedWordId) || words[0];
+  const selectedWordCells = new Set(getCellsForWord(selectedWord, grid).map((cell) => cellKey(cell.row, cell.col)));
 
-  const completedCount = words.filter((word) => {
-    const cells = getCellsForWord(word, gridMap);
-    return cells.every((cell, i) => guesses[keyForCell(cell.row, cell.col)] === word.answer[i]);
+  const solvedCount = words.filter((word) => {
+    const cells = getCellsForWord(word, grid);
+    return cells.every((cell, index) => guesses[cellKey(cell.row, cell.col)] === word.answer[index]);
   }).length;
 
   useEffect(() => {
-    words.forEach((word) => {
-      const id = `${word.number}-${word.direction}`;
-      const cells = getCellsForWord(word, gridMap);
-      const isSolved = cells.every((cell, i) => guesses[keyForCell(cell.row, cell.col)] === word.answer[i]);
+    for (const word of words) {
+      const id = wordId(word);
+      const cells = getCellsForWord(word, grid);
+      const isSolved = cells.every((cell, index) => guesses[cellKey(cell.row, cell.col)] === word.answer[index]);
 
-      if (isSolved && !solvedWords[id]) {
-        setSolvedWords((prev) => ({ ...prev, [id]: true }));
+      if (isSolved && !solved[id]) {
+        setSolved((prev) => ({ ...prev, [id]: true }));
         playDing();
-        launchConfetti(setBursts);
+        const burst = createConfetti();
+        setConfetti((prev) => [...prev, ...burst]);
+        window.setTimeout(() => {
+          setConfetti((prev) => prev.filter((piece) => !burst.some((item) => item.id === piece.id)));
+        }, 3200);
       }
-    });
-  }, [guesses, gridMap, solvedWords]);
+    }
+  }, [guesses, grid, solved]);
 
   useEffect(() => {
-    if (completedCount === words.length) {
-      setShowSolvedBanner(true);
+    if (solvedCount === words.length) {
+      setFinished(true);
     }
-  }, [completedCount]);
+  }, [solvedCount]);
 
-  function selectWord(word) {
-    const id = `${word.number}-${word.direction}`;
-    setSelectedWordId(id);
-    setSelectedCellKey(keyForCell(word.row, word.col));
-    refs.current[keyForCell(word.row, word.col)]?.focus();
+  function focusCell(key) {
+    setSelectedCell(key);
+    window.requestAnimationFrame(() => refs.current[key]?.focus());
   }
 
-  function moveWithinWord(currentKey, directionStep = 1) {
-    const current = gridMap.get(currentKey);
-    if (!current || !selectedWord) return;
+  function selectWord(word) {
+    setSelectedWordId(wordId(word));
+    focusCell(cellKey(word.row, word.col));
+  }
 
-    const cells = getCellsForWord(selectedWord, gridMap);
-    const index = cells.findIndex((cell) => keyForCell(cell.row, cell.col) === currentKey);
-    const nextIndex = Math.max(0, Math.min(cells.length - 1, index + directionStep));
-    const nextCell = cells[nextIndex];
-    if (nextCell) {
-      const nextKey = keyForCell(nextCell.row, nextCell.col);
-      setSelectedCellKey(nextKey);
-      refs.current[nextKey]?.focus();
-    }
+  function moveInsideWord(currentKey, step) {
+    const cells = getCellsForWord(selectedWord, grid);
+    const index = cells.findIndex((cell) => cellKey(cell.row, cell.col) === currentKey);
+    if (index === -1) return;
+    const next = cells[Math.max(0, Math.min(cells.length - 1, index + step))];
+    if (next) focusCell(cellKey(next.row, next.col));
   }
 
   function handleCellClick(cell) {
-    const key = keyForCell(cell.row, cell.col);
-    if (selectedCellKey === key) {
-      const toggled = selectedWord?.direction === "across" ? cell.down || cell.across : cell.across || cell.down;
+    const key = cellKey(cell.row, cell.col);
+    if (selectedCell === key) {
+      const toggled = selectedWord.direction === "across" ? cell.down || cell.across : cell.across || cell.down;
       if (toggled) setSelectedWordId(toggled);
     } else {
-      setSelectedCellKey(key);
+      setSelectedCell(key);
       setSelectedWordId(cell.across || cell.down);
     }
+    refs.current[key]?.focus();
   }
 
-  function handleInput(cell, value) {
-    const key = keyForCell(cell.row, cell.col);
-    const letter = value.slice(-1).toUpperCase().replace(/[^A-Z]/g, "");
+  function handleInput(cell, raw) {
+    const key = cellKey(cell.row, cell.col);
+    const letter = raw.toUpperCase().replace(/[^A-Z]/g, "").slice(-1);
     setGuesses((prev) => ({ ...prev, [key]: letter }));
-    if (letter) moveWithinWord(key, 1);
+    if (letter) moveInsideWord(key, 1);
   }
 
-  function handleKeyDown(e, cell) {
-    const key = keyForCell(cell.row, cell.col);
-    if (e.key === "Backspace") {
+  function handleKeyDown(event, cell) {
+    const key = cellKey(cell.row, cell.col);
+
+    if (event.key === "Backspace") {
       if (guesses[key]) {
         setGuesses((prev) => ({ ...prev, [key]: "" }));
       } else {
-        moveWithinWord(key, -1);
+        moveInsideWord(key, -1);
       }
       return;
     }
 
-    if (e.key === "ArrowRight") {
-      e.preventDefault();
-      setSelectedWordId(cell.across || selectedWordId);
-      moveWithinWord(key, 1);
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      if (cell.across) setSelectedWordId(cell.across);
+      const word = words.find((item) => wordId(item) === (cell.across || selectedWordId));
+      if (!word) return;
+      const cells = getCellsForWord(word, grid);
+      const index = cells.findIndex((item) => cellKey(item.row, item.col) === key);
+      const next = cells[Math.min(cells.length - 1, index + 1)];
+      if (next) focusCell(cellKey(next.row, next.col));
     }
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      setSelectedWordId(cell.across || selectedWordId);
-      moveWithinWord(key, -1);
+
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      if (cell.across) setSelectedWordId(cell.across);
+      const word = words.find((item) => wordId(item) === (cell.across || selectedWordId));
+      if (!word) return;
+      const cells = getCellsForWord(word, grid);
+      const index = cells.findIndex((item) => cellKey(item.row, item.col) === key);
+      const next = cells[Math.max(0, index - 1)];
+      if (next) focusCell(cellKey(next.row, next.col));
     }
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setSelectedWordId(cell.down || selectedWordId);
-      const downWord = words.find((w) => `${w.number}-${w.direction}` === (cell.down || selectedWordId));
-      if (downWord) {
-        const cells = getCellsForWord(downWord, gridMap);
-        const currentIndex = cells.findIndex((c) => keyForCell(c.row, c.col) === key);
-        const next = cells[Math.min(cells.length - 1, currentIndex + 1)];
-        if (next) {
-          const nextKey = keyForCell(next.row, next.col);
-          setSelectedCellKey(nextKey);
-          refs.current[nextKey]?.focus();
-        }
-      }
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (cell.down) setSelectedWordId(cell.down);
+      const word = words.find((item) => wordId(item) === (cell.down || selectedWordId));
+      if (!word) return;
+      const cells = getCellsForWord(word, grid);
+      const index = cells.findIndex((item) => cellKey(item.row, item.col) === key);
+      const next = cells[Math.min(cells.length - 1, index + 1)];
+      if (next) focusCell(cellKey(next.row, next.col));
     }
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setSelectedWordId(cell.down || selectedWordId);
-      const downWord = words.find((w) => `${w.number}-${w.direction}` === (cell.down || selectedWordId));
-      if (downWord) {
-        const cells = getCellsForWord(downWord, gridMap);
-        const currentIndex = cells.findIndex((c) => keyForCell(c.row, c.col) === key);
-        const next = cells[Math.max(0, currentIndex - 1)];
-        if (next) {
-          const nextKey = keyForCell(next.row, next.col);
-          setSelectedCellKey(nextKey);
-          refs.current[nextKey]?.focus();
-        }
-      }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (cell.down) setSelectedWordId(cell.down);
+      const word = words.find((item) => wordId(item) === (cell.down || selectedWordId));
+      if (!word) return;
+      const cells = getCellsForWord(word, grid);
+      const index = cells.findIndex((item) => cellKey(item.row, item.col) === key);
+      const next = cells[Math.max(0, index - 1)];
+      if (next) focusCell(cellKey(next.row, next.col));
     }
-    if (e.key === "Tab") {
-      e.preventDefault();
-      const currentIndex = words.findIndex((w) => `${w.number}-${w.direction}` === selectedWordId);
-      const nextWord = words[(currentIndex + 1) % words.length];
-      selectWord(nextWord);
-    }
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const currentIndex = words.findIndex((w) => `${w.number}-${w.direction}` === selectedWordId);
-      const nextWord = words[(currentIndex + 1) % words.length];
-      selectWord(nextWord);
+
+    if (event.key === "Tab" || event.key === "Enter") {
+      event.preventDefault();
+      const currentIndex = words.findIndex((item) => wordId(item) === selectedWordId);
+      selectWord(words[(currentIndex + 1) % words.length]);
     }
   }
 
-  function revealCurrentWord() {
-    const cells = getCellsForWord(selectedWord, gridMap);
+  function revealSelected() {
     const next = { ...guesses };
-    cells.forEach((cell, i) => {
-      next[keyForCell(cell.row, cell.col)] = selectedWord.answer[i];
+    getCellsForWord(selectedWord, grid).forEach((cell, index) => {
+      next[cellKey(cell.row, cell.col)] = selectedWord.answer[index];
     });
     setGuesses(next);
   }
 
   function resetPuzzle() {
-    const emptied = {};
-    gridMap.forEach((_, key) => {
-      emptied[key] = "";
+    const next = {};
+    grid.forEach((_, key) => {
+      next[key] = "";
     });
-    setGuesses(emptied);
-    setSolvedWords({});
-    setShowSolvedBanner(false);
+    setGuesses(next);
+    setSolved({});
+    setFinished(false);
     setSelectedWordId("2-across");
-    setSelectedCellKey(keyForCell(1, 0));
+    focusCell(cellKey(2, 0));
   }
-
-  const selectedWordCells = new Set(
-    selectedWord ? getCellsForWord(selectedWord, gridMap).map((cell) => keyForCell(cell.row, cell.col)) : []
-  );
 
   return (
     <div
-      className="min-h-screen w-full overflow-hidden"
       style={{
-        background: `radial-gradient(circle at top, ${palette.blush}, white 38%, ${palette.blush} 100%)`,
+        minHeight: "100vh",
+        background: `radial-gradient(circle at top, ${palette.blush} 0%, #fff 42%, ${palette.blush} 100%)`,
         color: palette.black,
+        fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       }}
     >
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(114,158,161,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(114,158,161,0.10) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
+      <style>{`
+        * { box-sizing: border-box; }
+        button, input { font: inherit; }
+        .shell {
+          max-width: 1420px;
+          margin: 0 auto;
+          padding: 28px;
+          position: relative;
+        }
+        .hero, .panel {
+          background: rgba(255,255,255,0.86);
+          backdrop-filter: blur(18px);
+          border: 1px solid rgba(114,158,161,0.35);
+          box-shadow: 0 24px 80px rgba(0,0,0,0.08);
+          border-radius: 32px;
+        }
+        .hero {
+          padding: 28px;
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 24px;
+          margin-bottom: 24px;
+        }
+        .layout {
+          display: grid;
+          grid-template-columns: minmax(760px, 1.15fr) minmax(320px, 0.85fr);
+          gap: 24px;
+          align-items: start;
+        }
+        .boardWrap {
+          overflow: auto;
+          border-radius: 28px;
+          padding: 20px;
+          border: 1px solid rgba(114,158,161,0.28);
+          background: linear-gradient(180deg, rgba(238,229,233,0.72), rgba(255,255,255,0.9));
+        }
+        .board {
+          display: grid;
+          grid-template-columns: repeat(${COLS}, ${CELL}px);
+          grid-template-rows: repeat(${ROWS}, ${CELL}px);
+          gap: 0;
+          width: max-content;
+          margin: 0 auto;
+          position: relative;
+        }
+        .empty {
+          width: ${CELL}px;
+          height: ${CELL}px;
+        }
+        .cell {
+          width: ${CELL}px;
+          height: ${CELL}px;
+          border: 1.5px solid rgba(0,0,0,0.72);
+          background: white;
+          position: relative;
+          padding: 0;
+          border-radius: 0;
+        }
+        .cell:hover {
+          background: rgba(238,229,233,0.75);
+        }
+        .cell.selected {
+          background: rgba(207,92,54,0.14);
+          box-shadow: inset 0 0 0 2px rgba(207,92,54,0.5);
+          z-index: 2;
+        }
+        .cell.inWord {
+          background: rgba(114,158,161,0.14);
+        }
+        .cell.correct input {
+          color: ${palette.plum};
+        }
+        .number {
+          position: absolute;
+          top: 2px;
+          left: 4px;
+          font-size: 10px;
+          line-height: 1;
+          font-weight: 700;
+          color: ${palette.plum};
+          pointer-events: none;
+        }
+        .letter {
+          width: 100%;
+          height: 100%;
+          border: 0;
+          outline: 0;
+          background: transparent;
+          text-align: center;
+          padding-top: 8px;
+          font-size: 21px;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: ${palette.black};
+          caret-color: ${palette.coral};
+        }
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 14px;
+          background: rgba(123,75,148,0.12);
+          color: ${palette.plum};
+          border-radius: 999px;
+          font-size: 14px;
+          font-weight: 600;
+        }
+        .title {
+          font-size: clamp(36px, 5vw, 62px);
+          line-height: 0.96;
+          margin: 14px 0 12px;
+          letter-spacing: -0.04em;
+        }
+        .muted {
+          color: rgba(0,0,0,0.68);
+          line-height: 1.7;
+        }
+        .actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          margin-top: 18px;
+        }
+        .primary, .secondary, .clueButton {
+          border: 0;
+          cursor: pointer;
+          transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+        }
+        .primary:hover, .secondary:hover, .clueButton:hover {
+          transform: translateY(-1px);
+        }
+        .primary {
+          background: ${palette.coral};
+          color: white;
+          padding: 12px 18px;
+          border-radius: 999px;
+          font-weight: 700;
+          box-shadow: 0 14px 30px rgba(207,92,54,0.25);
+        }
+        .secondary {
+          background: white;
+          color: ${palette.black};
+          padding: 12px 18px;
+          border-radius: 999px;
+          border: 1px solid rgba(114,158,161,0.55);
+          font-weight: 700;
+        }
+        .progressBox {
+          border-radius: 28px;
+          padding: 20px;
+          background: rgba(238,229,233,0.86);
+          border: 1px solid rgba(123,75,148,0.18);
+        }
+        .progressTrack {
+          margin-top: 16px;
+          width: 100%;
+          height: 12px;
+          background: rgba(114,158,161,0.18);
+          border-radius: 999px;
+          overflow: hidden;
+        }
+        .sideStack {
+          display: grid;
+          gap: 18px;
+        }
+        .selectedCard {
+          padding: 22px;
+          border-radius: 28px;
+          border: 1px solid rgba(123,75,148,0.25);
+          background: rgba(255,255,255,0.92);
+        }
+        .clueGrid {
+          display: grid;
+          gap: 18px;
+          grid-template-columns: 1fr 1fr;
+        }
+        .cluePanel {
+          padding: 20px;
+          border-radius: 28px;
+          border: 1px solid rgba(114,158,161,0.28);
+          background: rgba(255,255,255,0.92);
+        }
+        .clueList {
+          display: grid;
+          gap: 10px;
+        }
+        .clueButton {
+          width: 100%;
+          text-align: left;
+          padding: 12px 14px;
+          border-radius: 18px;
+          background: rgba(238,229,233,0.64);
+          border: 1px solid rgba(0,0,0,0.07);
+        }
+        .clueButton.activeAcross {
+          background: rgba(207,92,54,0.12);
+          border-color: rgba(207,92,54,0.35);
+        }
+        .clueButton.activeDown {
+          background: rgba(123,75,148,0.12);
+          border-color: rgba(123,75,148,0.35);
+        }
+        .confettiLayer {
+          pointer-events: none;
+          position: fixed;
+          inset: 0;
+          overflow: hidden;
+          z-index: 999;
+        }
+        .doneToast {
+          position: fixed;
+          left: 50%;
+          bottom: 20px;
+          transform: translateX(-50%);
+          width: min(92vw, 520px);
+          background: rgba(255,255,255,0.95);
+          border: 1px solid rgba(207,92,54,0.28);
+          border-radius: 24px;
+          box-shadow: 0 24px 60px rgba(0,0,0,0.12);
+          padding: 18px 20px;
+          z-index: 1000;
+        }
+        @media (max-width: 1180px) {
+          .hero, .layout, .clueGrid {
+            grid-template-columns: 1fr;
+          }
+          .boardWrap {
+            padding: 14px;
+          }
+        }
+        @media (max-width: 640px) {
+          .shell { padding: 16px; }
+          .hero { padding: 20px; }
+          .panel, .selectedCard, .cluePanel, .progressBox { border-radius: 24px; }
+        }
+      `}</style>
+
+      <div className="confettiLayer">
         <AnimatePresence>
-          {bursts.map((piece) => (
+          {confetti.map((piece) => (
             <motion.div
               key={piece.id}
-              initial={{ y: -30, x: 0, opacity: 0 }}
-              animate={{ y: 520, x: piece.drift, rotate: piece.rotate, opacity: [0, piece.opacity, 0] }}
+              initial={{ opacity: 0, y: -24, x: 0, rotate: 0 }}
+              animate={{ opacity: [0, 1, 1, 0], y: 520, x: piece.drift, rotate: piece.rotate }}
               exit={{ opacity: 0 }}
               transition={{ duration: piece.duration, delay: piece.delay, ease: "easeOut" }}
-              className="absolute top-0"
               style={{
+                position: "absolute",
+                top: 0,
                 left: `${piece.left}%`,
                 width: piece.size,
-                height: piece.size * 1.4,
-                borderRadius: piece.shape,
-                background: [palette.sage, palette.coral, palette.plum, palette.blush][
-                  Math.floor(Math.random() * 4)
-                ],
+                height: piece.size * 1.3,
+                borderRadius: piece.borderRadius,
+                background: [palette.sage, palette.coral, palette.plum, palette.blush][Math.floor(Math.random() * 4)],
               }}
             />
           ))}
         </AnimatePresence>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 overflow-hidden rounded-[2rem] border shadow-2xl"
-          style={{ borderColor: `${palette.sage}55`, background: "rgba(255,255,255,0.82)", backdropFilter: "blur(18px)" }}
-        >
-          <div className="grid gap-8 p-6 md:grid-cols-[1.3fr_0.9fr] md:p-8">
-            <div>
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
-                style={{ background: `${palette.plum}14`, color: palette.plum }}>
-                <Heart className="h-4 w-4" /> Sahana crossword
-              </div>
-
-              <h1 className="text-4xl font-semibold tracking-tight md:text-6xl">
-                A soft, romantic
-                <span style={{ color: palette.coral }}> crossword moment</span>
-              </h1>
-              <p className="mt-4 max-w-2xl text-sm leading-7 md:text-base" style={{ color: "rgba(0,0,0,0.72)" }}>
-                Fill in the clues, get a tiny celebratory ding, and watch confetti drift across the page whenever a word is completed.
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  onClick={revealCurrentWord}
-                  className="rounded-full px-5 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5"
-                  style={{ background: palette.coral, color: "white" }}
-                >
-                  Reveal current word
-                </button>
-                <button
-                  onClick={resetPuzzle}
-                  className="rounded-full border px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5"
-                  style={{ borderColor: `${palette.sage}70`, color: palette.black, background: "white" }}
-                >
-                  Reset puzzle
-                </button>
-              </div>
-            </div>
-
-            <div className="rounded-[1.75rem] border p-5 shadow-lg" style={{ borderColor: `${palette.plum}25`, background: `${palette.blush}99` }}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em]" style={{ color: palette.plum }}>Progress</p>
-                  <p className="mt-2 text-3xl font-semibold">{completedCount} / {words.length}</p>
-                </div>
-                <div className="rounded-2xl p-3" style={{ background: `${palette.sage}18`, color: palette.sage }}>
-                  <Sparkles className="h-8 w-8" />
-                </div>
-              </div>
-              <div className="mt-4 h-3 overflow-hidden rounded-full" style={{ background: `${palette.sage}20` }}>
-                <motion.div
-                  className="h-full rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(completedCount / words.length) * 100}%` }}
-                  style={{ background: `linear-gradient(90deg, ${palette.sage}, ${palette.plum})` }}
-                />
-              </div>
-              <p className="mt-4 text-sm leading-6" style={{ color: "rgba(0,0,0,0.7)" }}>
-                Tip: click a square to switch direction, use arrow keys to move, and press Tab or Enter to jump to the next clue.
-              </p>
+      <div className="shell">
+        <section className="hero">
+          <div>
+            <div className="badge"><Heart size={16} /> Sahana crossword</div>
+            <h1 className="title">
+              A real crossword,
+              <span style={{ color: palette.coral }}> finally fixed.</span>
+            </h1>
+            <p className="muted">
+              Click a clue or a square, type letters directly into the grid, and every completed answer gets a ding and confetti.
+            </p>
+            <div className="actions">
+              <button className="primary" onClick={revealSelected}>Reveal selected word</button>
+              <button className="secondary" onClick={resetPuzzle}>Reset puzzle</button>
             </div>
           </div>
-        </motion.div>
 
-        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.06 }}
-            className="rounded-[2rem] border p-4 shadow-2xl md:p-6"
-            style={{ borderColor: `${palette.sage}50`, background: "rgba(255,255,255,0.9)" }}
-          >
-            <div className="overflow-auto rounded-[1.5rem] border p-3 md:p-4" style={{ borderColor: `${palette.sage}30`, background: `${palette.blush}66` }}>
-              <div
-                className="grid min-w-[840px] gap-1"
-                style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-              >
-                {Array.from({ length: rows * cols }, (_, index) => {
-                  const r = Math.floor(index / cols);
-                  const c = index % cols;
-                  const key = keyForCell(r, c);
-                  const cell = gridMap.get(key);
+          <div className="progressBox">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+              <div>
+                <div style={{ fontSize: 12, letterSpacing: "0.24em", textTransform: "uppercase", color: palette.plum, fontWeight: 700 }}>Progress</div>
+                <div style={{ fontSize: 42, marginTop: 6, fontWeight: 800 }}>{solvedCount} / {words.length}</div>
+              </div>
+              <div style={{ background: "rgba(114,158,161,0.16)", color: palette.sage, borderRadius: 20, padding: 14 }}>
+                <Sparkles size={32} />
+              </div>
+            </div>
+            <div className="progressTrack">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${(solvedCount / words.length) * 100}%` }}
+                style={{ height: "100%", borderRadius: 999, background: `linear-gradient(90deg, ${palette.sage}, ${palette.plum})` }}
+              />
+            </div>
+            <p className="muted" style={{ marginTop: 14, marginBottom: 0 }}>
+              Tip: click the same square twice to toggle across/down, use arrow keys to move, and hit Enter to jump to the next clue.
+            </p>
+          </div>
+        </section>
 
-                  if (!cell) {
-                    return <div key={key} className="aspect-square rounded-md opacity-0" />;
-                  }
+        <section className="layout">
+          <div className="panel" style={{ padding: 18 }}>
+            <div className="boardWrap">
+              <div className="board">
+                {Array.from({ length: ROWS * COLS }, (_, index) => {
+                  const row = Math.floor(index / COLS);
+                  const col = index % COLS;
+                  const key = cellKey(row, col);
+                  const cell = grid.get(key);
 
-                  const guess = guesses[key] || "";
-                  const isSelected = selectedCellKey === key;
+                  if (!cell) return <div key={key} className="empty" />;
+
+                  const value = guesses[key] || "";
+                  const isSelected = selectedCell === key;
                   const inSelectedWord = selectedWordCells.has(key);
-                  const isCorrect = guess && guess === cell.solution;
+                  const isCorrect = value && value === cell.solution;
 
                   return (
                     <button
                       key={key}
+                      className={`cell ${isSelected ? "selected" : ""} ${inSelectedWord ? "inWord" : ""} ${isCorrect ? "correct" : ""}`}
                       onClick={() => handleCellClick(cell)}
-                      className="relative aspect-square rounded-lg border transition focus:outline-none"
-                      style={{
-                        borderColor: isSelected ? palette.coral : `${palette.black}45`,
-                        background: isSelected
-                          ? `${palette.coral}18`
-                          : inSelectedWord
-                            ? `${palette.sage}18`
-                            : "white",
-                        boxShadow: isSelected ? `0 0 0 2px ${palette.coral}30` : "none",
-                      }}
+                      type="button"
                     >
-                      {cell.numbers.length > 0 && (
-                        <span className="absolute left-1 top-0.5 text-[10px] font-semibold" style={{ color: palette.plum }}>
-                          {cell.numbers[0]}
-                        </span>
-                      )}
+                      {cell.number ? <span className="number">{cell.number}</span> : null}
                       <input
-                        ref={(el) => (refs.current[key] = el)}
-                        value={guess}
-                        onChange={(e) => handleInput(cell, e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(e, cell)}
+                        ref={(node) => { refs.current[key] = node; }}
+                        className="letter"
+                        value={value}
+                        maxLength={1}
+                        onChange={(event) => handleInput(cell, event.target.value)}
+                        onKeyDown={(event) => handleKeyDown(event, cell)}
                         onFocus={() => {
-                          setSelectedCellKey(key);
+                          setSelectedCell(key);
                           setSelectedWordId(cell.across || cell.down);
                         }}
-                        maxLength={1}
-                        className="h-full w-full bg-transparent text-center text-lg font-semibold uppercase outline-none md:text-xl"
-                        style={{ color: isCorrect ? palette.plum : palette.black, caretColor: palette.coral }}
                       />
                     </button>
                   );
                 })}
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="space-y-6"
-          >
-            <div className="rounded-[2rem] border p-5 shadow-xl" style={{ borderColor: `${palette.plum}35`, background: "rgba(255,255,255,0.92)" }}>
-              <div className="flex items-center gap-3">
-                <div className="rounded-2xl p-2" style={{ background: `${palette.coral}14`, color: palette.coral }}>
-                  <CheckCircle2 className="h-5 w-5" />
+          <div className="sideStack">
+            <div className="selectedCard">
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ background: "rgba(207,92,54,0.12)", color: palette.coral, borderRadius: 16, padding: 10 }}>
+                  <Check size={18} />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.24em]" style={{ color: palette.plum }}>Selected clue</p>
-                  <h2 className="mt-1 text-xl font-semibold">
-                    {selectedWord.number} {selectedWord.direction}
-                  </h2>
+                  <div style={{ fontSize: 12, letterSpacing: "0.24em", textTransform: "uppercase", color: palette.plum, fontWeight: 700 }}>Selected clue</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, marginTop: 4 }}>{selectedWord.number} {selectedWord.direction}</div>
                 </div>
               </div>
-              <p className="mt-4 text-base leading-7">{selectedWord.clue}</p>
-              <p className="mt-3 text-sm" style={{ color: "rgba(0,0,0,0.62)" }}>
-                {selectedWord.answer.length} letters
-              </p>
+              <div style={{ marginTop: 16, fontSize: 18, lineHeight: 1.6 }}>{selectedWord.clue}</div>
+              <div style={{ marginTop: 10, color: "rgba(0,0,0,0.6)", fontSize: 14 }}>{selectedWord.answer.length} letters</div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-              <div className="rounded-[2rem] border p-5 shadow-xl" style={{ borderColor: `${palette.sage}38`, background: "rgba(255,255,255,0.92)" }}>
-                <h3 className="mb-4 text-lg font-semibold">Across</h3>
-                <div className="space-y-3">
-                  {words.filter((w) => w.direction === "across").map((word) => {
-                    const id = `${word.number}-${word.direction}`;
-                    const active = selectedWordId === id;
+            <div className="clueGrid">
+              <div className="cluePanel">
+                <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 14 }}>Across</div>
+                <div className="clueList">
+                  {words.filter((word) => word.direction === "across").map((word) => {
+                    const active = selectedWordId === wordId(word);
                     return (
                       <button
-                        key={id}
+                        key={wordId(word)}
+                        className={`clueButton ${active ? "activeAcross" : ""}`}
                         onClick={() => selectWord(word)}
-                        className="w-full rounded-2xl border p-3 text-left transition hover:-translate-y-0.5"
-                        style={{
-                          borderColor: active ? palette.coral : `${palette.black}12`,
-                          background: active ? `${palette.coral}10` : `${palette.blush}55`,
-                        }}
+                        type="button"
                       >
-                        <p className="text-sm font-semibold" style={{ color: active ? palette.coral : palette.plum }}>
-                          {word.number}
-                        </p>
-                        <p className="mt-1 text-sm leading-6">{word.clue}</p>
+                        <div style={{ color: active ? palette.coral : palette.plum, fontWeight: 800, fontSize: 14 }}>{word.number}</div>
+                        <div style={{ marginTop: 4, lineHeight: 1.5 }}>{word.clue}</div>
                       </button>
                     );
                   })}
                 </div>
               </div>
 
-              <div className="rounded-[2rem] border p-5 shadow-xl" style={{ borderColor: `${palette.sage}38`, background: "rgba(255,255,255,0.92)" }}>
-                <h3 className="mb-4 text-lg font-semibold">Down</h3>
-                <div className="space-y-3">
-                  {words.filter((w) => w.direction === "down").map((word) => {
-                    const id = `${word.number}-${word.direction}`;
-                    const active = selectedWordId === id;
+              <div className="cluePanel">
+                <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 14 }}>Down</div>
+                <div className="clueList">
+                  {words.filter((word) => word.direction === "down").map((word) => {
+                    const active = selectedWordId === wordId(word);
                     return (
                       <button
-                        key={id}
+                        key={wordId(word)}
+                        className={`clueButton ${active ? "activeDown" : ""}`}
                         onClick={() => selectWord(word)}
-                        className="w-full rounded-2xl border p-3 text-left transition hover:-translate-y-0.5"
-                        style={{
-                          borderColor: active ? palette.plum : `${palette.black}12`,
-                          background: active ? `${palette.plum}10` : `${palette.blush}55`,
-                        }}
+                        type="button"
                       >
-                        <p className="text-sm font-semibold" style={{ color: active ? palette.plum : palette.coral }}>
-                          {word.number}
-                        </p>
-                        <p className="mt-1 text-sm leading-6">{word.clue}</p>
+                        <div style={{ color: active ? palette.plum : palette.coral, fontWeight: 800, fontSize: 14 }}>{word.number}</div>
+                        <div style={{ marginTop: 4, lineHeight: 1.5 }}>{word.clue}</div>
                       </button>
                     );
                   })}
                 </div>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </section>
       </div>
 
       <AnimatePresence>
-        {showSolvedBanner && (
+        {finished ? (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.96 }}
+            className="doneToast"
+            initial={{ opacity: 0, y: 18, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-xl rounded-[1.75rem] border px-6 py-4 shadow-2xl"
-            style={{ background: "rgba(255,255,255,0.95)", borderColor: `${palette.coral}40` }}
           >
-            <div className="flex items-center gap-4">
-              <div className="rounded-2xl p-3" style={{ background: `${palette.coral}14`, color: palette.coral }}>
-                <Heart className="h-6 w-6" />
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ background: "rgba(207,92,54,0.12)", color: palette.coral, borderRadius: 18, padding: 12 }}>
+                <Heart size={22} />
               </div>
               <div>
-                <p className="text-lg font-semibold">Puzzle complete ✨</p>
-                <p className="text-sm" style={{ color: "rgba(0,0,0,0.68)" }}>
-                  Every clue is filled in. Tiny celebration officially unlocked.
-                </p>
+                <div style={{ fontWeight: 800, fontSize: 18 }}>Puzzle complete ✨</div>
+                <div style={{ color: "rgba(0,0,0,0.65)", marginTop: 4 }}>Every clue is filled and the grid is actually aligned now.</div>
               </div>
             </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   );
