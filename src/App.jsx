@@ -585,6 +585,7 @@ export default function App() {
                 <div style={{ fontSize: 42, marginTop: 6, fontWeight: 800 }}>{solvedCount} / {words.length}</div>
               </div>
               <div style={{ background: "rgba(114,158,161,0.16)", color: palette.sage, borderRadius: 20, padding: 14 }}>
+                <Heart size={32} />
               </div>
             </div>
             <div className="progressTrack">
