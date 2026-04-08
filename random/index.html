@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To My Sweet Pumpkin</title>
+
+  <!-- Romantic Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Dancing Script', cursive;
+      background: linear-gradient(135deg, #c4b3f0, #2b5db3);
+      overflow-x: hidden;
+      color: #302b27;
+    }
+
+    /* NAV */
+    nav {
+      padding: 20px;
+      text-align: center;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      font-size: 1.4rem;
+    }
+
+    nav a {
+      color: #2b5db3;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    /* MAIN CARD */
+    .container {
+      max-width: 850px;
+      margin: 90px auto;
+      padding: 50px;
+      background: rgba(255,255,255,0.78);
+      border-radius: 24px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.22);
+      animation: fadeIn 2s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2b5db3;
+      font-size: 3.2rem;
+      margin-bottom: 30px;
+    }
+
+    p {
+      font-size: 1.6rem;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .signature {
+      text-align: center;
+      font-size: 2rem;
+      color: #2b5db3;
+      margin-top: 40px;
+    }
+
+    /* CUSTOM HEART */
+    .heart {
+      position: fixed;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #244f9e, #8f7de8);
+      transform: rotate(45deg);
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 1;
+      filter: drop-shadow(0 0 10px rgba(143,125,232,0.8));
+      animation:
+        floatUp 20s linear forwards,
+        pulse 5s ease-in-out infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -12px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -12px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) rotate(45deg);
+        opacity: 0.85;
+      }
+      to {
+        transform: translateY(-140vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(45deg); }
+      50% { transform: scale(1.1) rotate(45deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html">Home</a>
+  </nav>
+
+  <div class="container">
+    <h1>To My Sweet Pumpkin</h1>
+
+    <p>Dear Sahana Parikh,</p>
+
+    <p>
+      No words can describe how perfect a person you are. You bless the world with your presence.
+      When you smile, the whole world can feel it. It causes my heart to melt.
+      You are my protector, but more so you are my love.
+    </p>
+
+    <p>
+      The way your eyes glisten when you talk about something you love, or the way your hands wave
+      and feet tap when you're happy, truly reminds me how special you are.
+      You are one of a kind. No one will ever be able to compare.
+    </p>
+
+    <p>
+      Sahana Parikh, I envision a future with you. I can't wait for the day I get to hold you in my
+      arms forever.
+    </p>
+
+    <p>
+      Here is to our future. This website is a list of our memories and the things that truly make us special.
+    </p>
+
+    <div class="signature">
+      I love you Sahana Parikh!
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("click", (e) => {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+
+      const size = Math.random() * 6 + 22;
+      heart.style.width = size + "px";
+      heart.style.height = size + "px";
+
+      heart.style.left = e.clientX - size / 2 + "px";
+      heart.style.top = e.clientY - size / 2 + "px";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 22000);
+    });
+  </script>
+
+</body>
+</html>
